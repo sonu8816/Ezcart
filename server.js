@@ -8,12 +8,17 @@ import categoryRoutes from "./routes/categoryRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import cors from "cors";
 import path from "path";
+import { fileURLToPath } from "url";
 
 //configure env
 dotenv.config();
 
 //databse config
 connectDB();
+
+//es module fix
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 //rest object 
 // helps for creating api
@@ -23,7 +28,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());       // request aur res me json data bhi bhej sakte hai is middleware se pehle haam log body parsar use karte the
 app.use(morgan("dev"));
-app.use(express.static(path.join(__dirname, './client/build')));
+app.use(express.static(path.join(__dirname, './client')));
 
 //routes
 app.use("/api/v1/auth", authRoutes);
@@ -37,7 +42,7 @@ app.get("/", (req, res) => {
 
 //REST API
 app.use('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './client/build/index.html'));
+  res.sendFile(path.join(__dirname, './client/index.html'));
 });
 
 //PORT

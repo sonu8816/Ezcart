@@ -28,7 +28,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());       // request aur res me json data bhi bhej sakte hai is middleware se pehle haam log body parsar use karte the
 app.use(morgan("dev"));
-app.use(express.static(path.join(__dirname, './client')));
+app.use(express.static(path.join(__dirname, './client/build')));
 
 //routes
 app.use("/api/v1/auth", authRoutes);
@@ -36,8 +36,8 @@ app.use("/api/v1/category", categoryRoutes);
 app.use("/api/v1/product", productRoutes);
 
 //REST API
-app.use('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './client/public/index.html'));
+app.use('*', function (req, res) {
+  res.sendFile(path.join(__dirname, './client/build/index.html'));
 });
 
 //PORT

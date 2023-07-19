@@ -6,10 +6,10 @@ import { useCart } from "../context/cart";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Layout from "./../components/Layout/Layout";
-import Videos_nav from "./../components/Layout/Videos_nav";
 import { AiOutlineReload } from "react-icons/ai";
 import "../styles/Homepage.css";
 import useCategory from "../hooks/useCategory";
+import Slider from "../components/Slider";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -85,10 +85,8 @@ const HomePage = () => {
 
   return (
     <Layout title={"ALL Products - Best offers "}>
-    <div className="H_dash">
-      
-      {/* banner image */}
-      <Videos_nav />
+    <div className="H_dash">  
+      <Slider />
 
       <div className="container-fluid row mt-3 home-page">   
         <div className="col-md-3 filters">
@@ -125,7 +123,6 @@ const HomePage = () => {
             </button>
           </div>
         </div>
-
 
         <div className="col-md-9 ">  
           <h1 className="text-center">All Products</h1>

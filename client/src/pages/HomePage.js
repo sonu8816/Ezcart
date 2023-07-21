@@ -10,6 +10,7 @@ import { AiOutlineReload } from "react-icons/ai";
 import "../styles/Homepage.css";
 import useCategory from "../hooks/useCategory";
 import Slider from "../components/Slider";
+import { Link } from "react-router-dom";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -129,11 +130,18 @@ const HomePage = () => {
           <div className="d-flex flex-wrap">
             {products?.map((p) => (
               <div className="card m-2" style={{ width: "17rem"}} key={p._id}>
-                <img
-                  src={`/api/v1/product/product-photo/${p._id}`}
-                  className="card-img-top"
-                  alt={p.name}
-                />
+                <Link
+                  key={p._id}
+                  to={`/product/${p.slug}`}
+                  className="product-link"
+                >
+                  <img
+                    src={`/api/v1/product/product-photo/${p._id}`}
+                    className="card-img-top"
+                    alt={p.name}
+                  />
+                </Link>
+                
                 <div className="card-body">
                   <div className="card-name-price">
                     <h5 className="card-title">{p.name}</h5>
@@ -147,13 +155,7 @@ const HomePage = () => {
                   <p className="card-text ">
                     {p.description.substring(0, 60)}...
                   </p>
-                  <div className="card-name-price">
-                    <button
-                      className="btn btn-info ms-1"
-                      onClick={() => navigate(`/product/${p.slug}`)}
-                    >
-                      More Details
-                    </button>
+                  <div className="card-bottom">
                     <button
                       className="btn btn-dark ms-1"
                       onClick={() => {
@@ -166,6 +168,14 @@ const HomePage = () => {
                       }}
                     >
                       ADD TO CART
+                    </button>
+                    <button
+                      className="btn btn-info ms-1"
+                      onClick={() => navigate(`/product/${p.slug}`)}
+                      // disabled={2 > 1}
+                    >
+                      {/* BUY NOW */}
+                      MORE DETAILS
                     </button>
                   </div>
                 </div>

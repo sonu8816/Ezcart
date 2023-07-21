@@ -9,6 +9,20 @@ const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [auth] = useAuth();
 
+  //total price
+  const totalPrice = (products) => {
+    try {
+      let total = 0;
+      products?.map((item) => total = total + item.price );
+      return total.toLocaleString("en-US", {
+        style: "currency",
+        currency: "INR",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getOrders = async () => {
     try {
       const { data } = await axios.get("/api/v1/auth/orders");
@@ -30,27 +44,29 @@ const Orders = () => {
             <UserMenu />
           </div>
           <div className="col-md-9">
-            <h1 className="text-center">All Orders</h1>
+            <h1 className="text-center">Your Orders</h1>
             {orders?.map((o, i) => {
               return (
-                <div className="border shadow">
+                <div className="border mb-3 shadow table-responsive">
                   <table className="table">
                     <thead>
-                      <tr>
+                      <tr  className="table-dark">
                         <th scope="col">#</th>
                         <th scope="col">Status</th>
-                        <th scope="col"> date</th>
+                        <th scope="col">Date</th>
                         <th scope="col">Payment</th>
                         <th scope="col">Quantity</th>
+                        <th scope="col">Amount</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
+                      <tr  className="table-secondary">
                         <td>{i + 1}</td>
                         <td>{o?.status}</td>
                         <td>{moment(o?.createAt).fromNow()}</td>
                         <td>{o?.payment.success ? "Success" : "Failed"}</td>
                         <td>{o?.products?.length}</td>
+                        <td>{totalPrice(o?.products)}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -68,7 +84,7 @@ const Orders = () => {
                         </div>
                         <div className="col-md-8">
                           <p>{p.name}</p>
-                          <p>{p.description.substring(0, 30)}</p>
+                          <p>{p.description.substring(0, 30)}...</p>
                           <p>Price : {p.price}</p>
                         </div>
                       </div>

@@ -18,6 +18,20 @@ const AdminOrders = () => {
   const [changeStatus, setCHangeStatus] = useState("");
   const [orders, setOrders] = useState([]);
   const [auth] = useAuth();
+
+  //total price
+  const totalPrice = (products) => {
+    try {
+      let total = 0;
+      products?.map((item) => total = total + item.price );
+      return total.toLocaleString("en-US", {
+        style: "currency",
+        currency: "INR",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   
   const getOrders = async () => {
     try {
@@ -54,20 +68,21 @@ const AdminOrders = () => {
           <h1 className="text-center">All Orders</h1>
           {orders?.map((o, i) => {
             return (
-              <div className="border shadow">
+              <div className="border mb-3 shadow table-responsive">
                 <table className="table">
                   <thead>
-                    <tr>
+                    <tr  className="table-dark">
                       <th scope="col">#</th>
                       <th scope="col">Status</th>
                       <th scope="col">Buyer</th>
-                      <th scope="col"> date</th>
+                      <th scope="col">Date</th>
                       <th scope="col">Payment</th>
                       <th scope="col">Quantity</th>
+                      <th scope="col">Amount</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
+                    <tr  className="table-secondary">
                       <td>{i + 1}</td>
                       <td>
                         <Select
@@ -86,9 +101,11 @@ const AdminOrders = () => {
                       <td>{moment(o?.createAt).fromNow()}</td>
                       <td>{o?.payment.success ? "Success" : "Failed"}</td>
                       <td>{o?.products?.length}</td>
+                      <td>{totalPrice(o?.products)}</td>
                     </tr>
                   </tbody>
                 </table>
+
                 <div className="container">
                   {o?.products?.map((p, i) => (
                     <div className="row mb-2 p-3 card flex-row" key={p._id}>

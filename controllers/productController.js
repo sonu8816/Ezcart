@@ -189,14 +189,23 @@ export const updateProductController = async (req, res) => {
   }
 };
 
-// filters
+// filter product
 export const productFiltersController = async (req, res) => {
   try {
+    const perPage = 6;
+    const page = req.params.page ? req.params.page : 1;
+   
     const { checked, radio } = req.body;
     let args = {};
     if (checked.length > 0) args.category = checked;
     if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
-    const products = await productModel.find(args);
+    
+    const products = await productModel
+      .find(args)
+      .select("-photo")
+      .skip((page - 1) * perPage)
+      .limit(perPage)
+      .sort({ createdAt: -1 });
     res.status(200).send({
       success: true,
       products,
@@ -211,7 +220,29 @@ export const productFiltersController = async (req, res) => {
   }
 };
 
-// product count
+// filter product count
+export const productFilterCountController = async (req, res) => {
+  try {
+    const { checked, radio } = req.body;
+    let args = {};
+    if (checked.length > 0) args.category = checked;
+    if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
+    const total = await productModel.countDocuments(args);
+    res.status(200).send({
+      success: true,
+      total,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "Error While Count Filtering Products",
+      error,
+    });
+  }
+};
+
+//All product count
 export const productCountController = async (req, res) => {
   try {
     const total = await productModel.find({}).estimatedDocumentCount();
@@ -222,7 +253,7 @@ export const productCountController = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).send({
-      message: "Error in product count",
+      message: "Error in Count All Product",
       error,
       success: false,
     });

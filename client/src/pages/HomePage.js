@@ -23,33 +23,16 @@ const HomePage = () => {
   const [loading, setLoading] = useState(false);
 
   //get all category
-  const categories = useCategory();
+  const categories = useCategory();          //custom hook
 
-  //getTOtal Count
-  const getTotal = async () => {
-    try {
-      const { data } = await axios.get("/api/v1/product/product-count");
-      setTotal(data?.total);
-    } catch (error) {
-      console.log(error);
-    }
+  // Reset all filters
+  const handleReset = () => {
+    setRadio([]); 
+    setChecked([]); 
   };
-
-  //load more
-  const loadMore = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(`/api/v1/product/product-list/${page}`);
-      setLoading(false);
-      setProducts([...products, ...data?.products]);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
-  };
-
+  
   // filter by category
-  const handleFilter = (value, id) => {
+  const handleFilterByCategory = (value, id) => {
     let all = [...checked];
     if (value) {     /* if we select the checkbox */
       all.push(id);
@@ -59,25 +42,40 @@ const HomePage = () => {
     setChecked(all);
   };
 
-  //get filterd product
-  const filterProduct = async () => {
+  // getFilterTOtal Count
+  const getTotal = async () => {
     try {
-      const { data } = await axios.post("/api/v1/product/product-filters", {
+      const { data } = await axios.post("/api/v1/product/product-filters-count",{
         checked,
         radio,
       });
-      setProducts(data?.products);
+      setTotal(data?.total);
     } catch (error) {
       console.log(error);
     }
   };
 
+  //loadmore filtered product
+  const loadMore = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post(`/api/v1/product/product-filters/${page}`, {
+        checked,
+        radio,
+      });
+      setLoading(false);
+      if(page===1) setProducts([...data?.products]);
+      else setProducts([...products, ...data?.products]);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+  
   useEffect(() => {
     getTotal();
-  }, []);
-
-  useEffect(() => {
-    if (checked.length || radio.length) filterProduct();
+    setPage(1);              // Agar Pahle se hi page 1 pe hai toh loadmore() call nhi hoga
+    loadMore();              // Isliye 1 times loadmore() call karna padega   
   }, [checked, radio]);
 
   useEffect(() => {
@@ -91,34 +89,57 @@ const HomePage = () => {
 
       <div className="container-fluid row mt-3 home-page">   
         <div className="col-md-3 filters">
-          <h4 className="text-center">Filter By Category</h4>
-          <div className="d-flex flex-column">
-            {categories?.map((c) => (
-              <Checkbox
-                key={c._id}
-                onChange={(e) => handleFilter(e.target.checked, c._id)}
-              >
-                {c.name}
-              </Checkbox>
-            ))}
-          </div>
-
-          {/* price filter */}
-          <h4 className="text-center mt-4">Filter By Price</h4>
-          <div className="d-flex flex-column">
-            <Radio.Group onChange={(e) => setRadio(e.target.value)}>
-              {Prices?.map((p) => (
-                <div key={p._id}>
-                  <Radio value={p.array}>{p.name}</Radio>
+          
+          {/* category filter  */}
+          <div className="accordion my-3">
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                  Filter By Category
+                </button>
+              </h2>
+              <div id="panelsStayOpen-collapseOne" className="accordion-collapse collapse">
+                <div className="accordion-body d-flex flex-column">
+                  {categories?.map((c) => (
+                    <Checkbox
+                      key={c._id}
+                      checked={checked.includes(c._id)}
+                      onChange={(e) => handleFilterByCategory(e.target.checked, c._id)}
+                    >
+                      {c.name}
+                    </Checkbox>
+                  ))}
                 </div>
-              ))}
-            </Radio.Group>
+              </div>
+            </div>
+          </div>
+        
+          {/* price filter */}
+          <div className="accordion mb-3">
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                  Filter By Price
+                </button>
+              </h2>
+              <div id="panelsStayOpen-collapseTwo" className="accordion-collapse collapse">
+                <div className="accordion-body d-flex flex-column">
+                  <Radio.Group value={radio} onChange={(e) => setRadio(e.target.value)}>
+                    {Prices?.map((p) => (
+                      <div key={p._id}>
+                        <Radio value={p.array}>{p.name}</Radio>
+                      </div>
+                    ))}
+                  </Radio.Group>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="d-flex flex-column">
             <button
-              className="btn btn-danger"
-              onClick={() => window.location.reload()}
+              className="btn reset-button"
+              onClick={() => handleReset()}
             >
               RESET FILTERS
             </button>
@@ -127,9 +148,9 @@ const HomePage = () => {
 
         <div className="col-md-9 ">  
           <h1 className="text-center">All Products</h1>
-          <div className="d-flex flex-wrap">
+          <div className="d-flex flex-wrap allProduct">
             {products?.map((p) => (
-              <div className="card m-2" style={{ width: "17rem"}} key={p._id}>
+              <div className="card m-2" key={p._id}>
                 <Link
                   key={p._id}
                   to={`/product/${p.slug}`}
@@ -141,7 +162,7 @@ const HomePage = () => {
                     alt={p.name}
                   />
                 </Link>
-                
+
                 <div className="card-body">
                   <div className="card-name-price">
                     <h5 className="card-title">{p.name}</h5>
@@ -183,23 +204,24 @@ const HomePage = () => {
             ))}
           </div>
           <div className="m-2 p-3">
+            {
+              products.length === 0 && total === 0 && (
+                <div className="text-center">No Product Found</div>
+              )
+            }
             {products && products.length < total && (
-              <button
-                className="btn loadmore"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPage(page + 1);
-                }}
-              >
-                {loading ? (
-                  "Loading ..."
-                ) : (
-                  <>
-                    {" "}
-                    Loadmore <AiOutlineReload />
-                  </>
-                )}
-              </button>
+              <>
+                <div> Showing {products.length} of {total} products</div>
+                <button
+                  className="btn loadmore"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setPage(page + 1);
+                  }}
+                >
+                  {loading ? ("Loading ...") : (<> {" "} Loadmore <AiOutlineReload /> </>)}
+                </button>
+              </>
             )}
           </div>
         </div>

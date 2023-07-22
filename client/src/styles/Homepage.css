@@ -1,6 +1,6 @@
-
-.banner-img {
-  margin-top: 60px;
+.home-page .allProduct{
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .home-page h1 {
@@ -12,9 +12,11 @@
   display: flex;
   flex-wrap: wrap;
 }
+
 .home-page .card {
   background-color: rgba(128, 128, 128, 0.097);
   width: 18rem;
+  flex-grow: 1;
 }
 
 .home-page .card-name-price, .home-page .card-bottom {
@@ -66,10 +68,20 @@
 filters
 ===================== */
 
-.filters h4 {
-  margin-top: 100px;
-  color: gray !important;
-  border-bottom: 1px solid rgba(128, 128, 128, 0.337);
+.filters .reset-button {
+  background-color: black;
+  color: white;
+  border-radius: 30px;
+  padding: 0.5rem 0px;
+  margin-bottom: 100px;
+}
+
+.filters .reset-button:hover {
+  background-color: rgb(77, 75, 75);
+}
+
+.filters {
+  margin-top: 75px;
 }
 
 .ant-checkbox-wrapper:first-of-type {
@@ -82,14 +94,6 @@ filters
 .ant-radio-wrapper {
   margin-bottom: 5px !important;
   margin-left: 10px;
-}
-
-.filters button {
-  background-color: black;
-  width: 100%;
-  border: none;
-  border-radius: 0;
-  margin-top: 20px;
 }
 
 .loadmore {

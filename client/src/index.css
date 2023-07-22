@@ -43,10 +43,12 @@
   margin-right: 10px;
   margin-top: 4px;
 }
+
 .search-form input {
   border: none;
   border-radius: 0;
 }
+
 .search-form button {
   background-color: #000000;
   border-radius: 0;
@@ -148,6 +150,16 @@
   padding: 20px 0px;
 }
 
-.H_dash{
-  margin-top: 50px !important;
+.search-page {
+  margin-top: 70px !important;
+  margin-bottom: 30px;
+}
+
+.category-page {
+  margin-top: 70px !important;
+  margin-bottom: 30px;
+}
+
+.card-component img:hover {
+  transform: scale(0.9)  !important;
 }

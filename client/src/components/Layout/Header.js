@@ -126,7 +126,7 @@ const Header = () => {
               )}
               <li className="nav-item">
                 <NavLink to="/cart" className="nav-link">
-                  <Badge className="nav-link" style={{ color: "azure" }}count={cart?.length} showZero offset={[10, -5]}>
+                  <Badge className="nav-link" style={{ color: "azure" }}count={cart?.length} offset={[10, -5]}>
                     Cart
                   </Badge>
                 </NavLink>

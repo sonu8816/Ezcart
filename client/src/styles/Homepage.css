@@ -1,3 +1,7 @@
+.H_dash{
+  margin-top: 60px !important;
+}
+
 .home-page .allProduct{
   display: flex;
   flex-wrap: wrap;
@@ -5,63 +9,12 @@
 
 .home-page h1 {
   color: gray;
-  font-family: "Playfair Display", serif;
+  font-family: "Playfair Display", serif; 
 }
 
 .home-page {
   display: flex;
   flex-wrap: wrap;
-}
-
-.home-page .card {
-  background-color: rgba(128, 128, 128, 0.097);
-  width: 18rem;
-  flex-grow: 1;
-}
-
-.home-page .card-name-price, .home-page .card-bottom {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.home-page .card-price {
-  color: green;
-  font-weight: bold;
-}
-
-.home-page button {
-  border-radius: 0;
-  width: 100%;
-  border-top-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.home-page .card-text {
-  color: rgb(90, 89, 89);
-}
-
-.home-page .card img:hover {
-  transform: scale(0.9);
-}
-
-.home-page .card-img-top {
-  height: 300px !important;
-}
-
-/* button bottom  */
-
-.home-page .card-body {
-  /* background-color: rgb(143, 172, 240); */
-  display: flex;
-  flex-direction: column;
-}
-
-.home-page .card-bottom {
-  /* background-color: rgb(237, 149, 16); */
-  margin-top: auto;
 }
 
 /* ==================
@@ -74,10 +27,28 @@ filters
   border-radius: 30px;
   padding: 0.5rem 0px;
   margin-bottom: 100px;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .filters .reset-button:hover {
   background-color: rgb(77, 75, 75);
+}
+
+.filters .accordion-button {
+  background-color: rgba(92, 172, 237, 0.906);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.filters .collapsed {
+  background-color: rgba(104, 227, 245, 0.685);
+}
+
+.filters .accordion-collapse {
+  background-color: rgba(167, 205, 237, 0.685);
 }
 
 .filters {
@@ -100,4 +71,5 @@ filters
   color: green;
   font-weight: bold;
   font-size: 20px !important;
+  width: 100%;
 }

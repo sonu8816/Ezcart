@@ -100,6 +100,7 @@ const HomePage = () => {
                       key={c._id}
                       checked={checked.includes(c._id)}
                       onChange={(e) => handleFilterByCategory(e.target.checked, c._id)}
+                      className="filter-option-text"
                     >
                       {c.name}
                     </Checkbox>
@@ -122,7 +123,7 @@ const HomePage = () => {
                   <Radio.Group value={radio} onChange={(e) => setRadio(e.target.value)}>
                     {Prices?.map((p) => (
                       <div key={p._id}>
-                        <Radio value={p.array}>{p.name}</Radio>
+                        <Radio value={p.array} className="filter-option-text">{p.name}</Radio>
                       </div>
                     ))}
                   </Radio.Group>

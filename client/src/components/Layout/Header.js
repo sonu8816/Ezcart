@@ -37,10 +37,11 @@ const Header = () => {
           >
             <span className="navbar-toggler-icon" />
           </button>
+          <Link to="/" className="navbar-brand">
+            🛒 ELITE COMMERCE
+          </Link>
+
           <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <Link to="/" className="navbar-brand">
-              🛒 ELITE COMMERCE
-            </Link>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
               <SearchInput />
               <li className="nav-item">

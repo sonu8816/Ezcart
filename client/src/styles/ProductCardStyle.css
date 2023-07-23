@@ -17,7 +17,7 @@
 
 .card-component button {
   border-radius: 0;
-  width: 100%;
+  /* width: 100%; */
   border-top-left-radius: 5px;
   border-bottom-right-radius: 5px;
   font-size: 14px;
@@ -45,4 +45,17 @@
 
 .card-component .card-bottom {
   margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.card-component .card-bottom .select-quantity {
+  margin-bottom: 10px;      
+  flex : 1;
+}
+
+.card-component .card-bottom .btn {
+  margin-bottom: 10px;      
+  flex : 3;
 }

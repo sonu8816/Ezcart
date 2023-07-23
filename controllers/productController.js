@@ -203,6 +203,7 @@ export const productFiltersController = async (req, res) => {
     const products = await productModel
       .find(args)
       .select("-photo")
+      .populate("category")
       .skip((page - 1) * perPage)
       .limit(perPage)
       .sort({ createdAt: -1 });
@@ -317,7 +318,7 @@ export const realtedProductController = async (req, res) => {
         _id: { $ne: pid },
       })
       .select("-photo")
-      .limit(3)
+      .limit(4)
       .populate("category");
     res.status(200).send({
       success: true,
@@ -376,7 +377,7 @@ export const brainTreePaymentController = async (req, res) => {
     const { nonce, cart } = req.body;
     let total = 0;
     cart.map((i) => {
-      total += i.price;
+      total += i.product.price;
     });
     let newTransaction = gateway.transaction.sale(
       {

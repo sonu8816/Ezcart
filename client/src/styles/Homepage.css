@@ -35,8 +35,12 @@ filters
   background-color: rgb(77, 75, 75);
 }
 
+.filters .filter-option-text {
+  font-size: 20px;
+}
+
 .filters .accordion-button {
-  background-color: rgba(92, 172, 237, 0.906);
+  background-color: rgba(104, 227, 245, 0.685);
   padding-top: 1rem;
   padding-bottom: 1rem;
   font-size: 20px;
@@ -62,6 +66,7 @@ filters
 .ant-checkbox-wrapper {
   margin: 2px;
 }
+
 .ant-radio-wrapper {
   margin-bottom: 5px !important;
   margin-left: 10px;
@@ -72,4 +77,16 @@ filters
   font-weight: bold;
   font-size: 20px !important;
   width: 100%;
+}
+
+.ant-checkbox .ant-checkbox-inner {
+  width: 20px;
+  height: 20px;
+  border-color: red;
+}
+
+.ant-radio-wrapper .ant-radio-inner {
+  width: 20px;
+  height: 20px;
+  border-color: red;
 }

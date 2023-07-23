@@ -1,5 +1,15 @@
 .product-details {
   margin-top: 100px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.similar-products {
+  margin-bottom: 20px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .product-details-info {
@@ -10,4 +20,22 @@
 
 .product-details-info h6 {
   margin-bottom: 20px !important;
+}
+
+.product-detail-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.product-detail-bottom .select-quantity {
+  flex: 1;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.product-detail-bottom .btn {
+  flex: 3;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }

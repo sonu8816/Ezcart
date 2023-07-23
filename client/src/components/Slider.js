@@ -5,9 +5,9 @@ const Slider = () => {
     <>
         <div id="carouselExampleAutoplaying" className="carousel slide" data-bs-ride="carousel">
           <div className="carousel-inner">
-            {[1,2,3,4,5,6].map((i) => (
-                <div className={`carousel-item ${i === 1 ? 'active' : ''}`} data-bs-interval="3000" key={i}>
-                    <img src={`/images/b_${i}.jpg`} height="300" className="d-block w-100" alt={`slider_img_${i}`} />
+            {[...Array(6)].map((_,i) => (
+                <div className={`carousel-item ${i === 0 ? 'active' : ''}`} data-bs-interval="3000" key={i}>
+                    <img src={`/images/b_${i+1}.jpg`} height="300" className="d-block w-100" alt={`slider_img_${i}`} />
                 </div>
             ))}    
           </div>

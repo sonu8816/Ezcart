@@ -55,7 +55,6 @@ const Products = () => {
                     </div>
 
                     <div className="col-md-8 card-content">
-                      {/* <pre>{JSON.stringify(p, null, 4)}</pre> */}
                       <div className="card-body">
                         <div className="card-up">
                         <div className="card-name-price">

@@ -6,8 +6,9 @@ import Layout from "./../components/Layout/Layout";
 import { AiOutlineReload } from "react-icons/ai";
 import "../styles/Homepage.css";
 import useCategory from "../hooks/useCategory";
-import Slider from "../components/Slider";
+import ImageSlider from "../components/ImageSlider";
 import ProductCard from "../components/ProductCard";
+import PriceRangeSlider from "../components/RangeSlider";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -80,7 +81,7 @@ const HomePage = () => {
   return (
     <Layout title={"ALL Products - Best offers "}>
     <div className="H_dash">  
-      <Slider />
+      <ImageSlider />
 
       <div className="container-fluid row mt-3 home-page">   
         <div className="col-md-3 filters">
@@ -131,6 +132,23 @@ const HomePage = () => {
               </div>
             </div>
           </div>
+
+          {/* Range filter */}
+          <div className="accordion mb-3">
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                  Filter By Range
+                </button>
+              </h2>
+              <div id="panelsStayOpen-collapseThree" className="accordion-collapse collapse">
+                <div className="accordion-body d-flex flex-column">
+                  <PriceRangeSlider setValue={setRadio} />
+                </div>
+              </div>
+            </div>
+          </div>
+
 
           <div className="d-flex flex-column">
             <button

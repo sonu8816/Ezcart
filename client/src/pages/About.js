@@ -13,9 +13,12 @@ const About = () => {
           />
         </div>
         <div className="col-md-4">
-          <p className="text-justify mt-2">
-            We want to deliver plant to very one with this website at affordable price.
-          </p>
+          <ul>
+          <li><strong>Our Story:</strong> Learn about our journey, challenges, and growth as an E-commerce app driven by our passion for providing exceptional products and services.</li>
+          <li><strong>Mission:</strong> Our mission is to curate a diverse selection of high-quality products while delivering outstanding customer experiences.</li>
+          <li><strong>Customer-Centric Approach:</strong> We prioritize our customers by offering responsive support, easy returns, and efficient order processing.</li>
+          <li><strong>Team and Values:</strong> Meet our dedicated team and discover the values that underpin our commitment to transparency and integrity.</li>
+          </ul>
         </div>
       </div>
     </Layout>

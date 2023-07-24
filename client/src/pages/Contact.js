@@ -22,7 +22,7 @@ const Contact = () => {
             <BiMailSend /> : www.help@elitecommerce.com
           </p>
           <p className="mt-3">
-            <BiPhoneCall /> : +91-6234567891
+            <BiPhoneCall /> : +91-9523505104
           </p>
           <p className="mt-3">
             <BiSupport /> : 1800-0000-0001 (toll free)

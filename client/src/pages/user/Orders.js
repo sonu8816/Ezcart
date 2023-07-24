@@ -4,6 +4,7 @@ import Layout from "./../../components/Layout/Layout";
 import axios from "axios";
 import { useAuth } from "../../context/auth";
 import moment from "moment";
+import "./../../styles/orderPageStyle.css";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -51,10 +52,10 @@ const Orders = () => {
     <Layout title={"Your Orders"}>
       <div className="container-fluid p-3 m-3 dashboard">
         <div className="row">
-          <div className="col-md-3">
+          <div className="col-md-3 fixed-left">
             <UserMenu />
           </div>
-          <div className="col-md-9">
+          <div className="col-md-9 scroll-right">
             <h1 className="text-center">Your Orders</h1>
             {orders?.map((o, i) => {
               return (
@@ -74,7 +75,7 @@ const Orders = () => {
                       <tr  className="table-secondary">
                         <td>{i + 1}</td>
                         <td>{o?.status}</td>
-                        <td>{moment(o?.createAt).fromNow()}</td>
+                        <td>{moment(o?.createdAt).fromNow()}</td>
                         <td>{o?.payment.success ? "Success" : "Failed"}</td>
                         <td>{o?.products?.length} ({totalItems(o?.products)})</td>
                         <td>{totalPrice(o?.products)}</td> 

@@ -17,8 +17,8 @@
   font-style: bold;
   line-height: 26px;
   text-transform: uppercase;
-  box-shadow: 0 8px 6px -6px whitesmoke;
-  --webkit-box-shadow: 0 8px 6px -6px rgb(229, 220, 220);
+  /* box-shadow: 0 8px 6px -6px whitesmoke; */
+  /* --webkit-box-shadow: 0 8px 6px -6px rgb(229, 220, 220); */
   border-bottom: 0.5px solid rgb(97, 97, 97) !important;
 }
 
@@ -55,7 +55,7 @@
   color: white;
 }
 
-@media (max-width: 990px) {
+@media (max-width: 991px) {
   .search-form {
     margin-top: 1rem;
   }

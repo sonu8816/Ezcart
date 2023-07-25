@@ -8,7 +8,7 @@ const Search = () => {
 
   return (
     <Layout title={"Search results"}>
-      <div className="container mt-4 search-page">
+      <div className="mt-4 search-page">
         <h3 className="text-center">Search Results</h3>
         <h6 className="text-center">
           {
@@ -18,7 +18,7 @@ const Search = () => {
           }
         </h6>
 
-        <div className="d-flex flex-wrap">
+        <div className="d-flex flex-wrap justify-content-evenly">
           {values?.results.map((p) => (<ProductCard p={p} />))}
         </div>
       </div>

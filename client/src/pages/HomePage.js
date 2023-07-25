@@ -20,12 +20,6 @@ const HomePage = () => {
 
   //get all category
   const categories = useCategory();          //custom hook
-
-  // Reset all filters
-  const handleReset = () => {
-    setRadio([]); 
-    setChecked([]); 
-  };
   
   // filter by category
   const handleFilterByCategory = (value, id) => {
@@ -68,13 +62,29 @@ const HomePage = () => {
     }
   };
   
+  // Apply all filters
+  const handleApplyFilter = () => {
+    if(page===1){
+      getTotal();
+      loadMore();
+    } else {
+      setPage(1);
+    }
+  };
+  
+  // Reset all filters
+  const handleReset = () => {
+    setRadio([]); 
+    setChecked([]); 
+  };
+
+  // All Products show karne ke liye
   useEffect(() => {
-    getTotal();
-    setPage(1);              // Agar Pahle se hi page 1 pe hai toh loadmore() call nhi hoga
-    loadMore();              // Isliye 1 times loadmore() call karna padega   
-  }, [checked, radio]);
+    if(!radio.length && !checked.length) handleApplyFilter();
+  }, [radio, checked]);
 
   useEffect(() => {
+    if(page===1) getTotal();
     loadMore();
   }, [page]);
 
@@ -143,13 +153,23 @@ const HomePage = () => {
               </h2>
               <div id="panelsStayOpen-collapseThree" className="accordion-collapse collapse">
                 <div className="accordion-body d-flex flex-column">
-                  <PriceRangeSlider setValue={setRadio} />
+                  <PriceRangeSlider range={radio} setRange={setRadio} />
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Apply filter */}
+          <div className="d-flex flex-column">
+            <button
+              className="btn apply-button"
+              onClick={() => handleApplyFilter()}
+            >
+              APPLY FILTERS
+            </button>
+          </div>
 
+          {/* Reset filter */}
           <div className="d-flex flex-column">
             <button
               className="btn reset-button"
@@ -158,15 +178,18 @@ const HomePage = () => {
               RESET FILTERS
             </button>
           </div>
+
         </div>
 
         <div className="col-md-9 ">  
           <h1 className="text-center">All Products</h1>
+          
           <div className="d-flex flex-wrap allProduct">
             {products?.map((p) => (<ProductCard p={p} />))}
           </div>
+
           <div className="m-2 p-3">
-            {products.length === 0 && total === 0 && (
+            {products?.length === 0 && total === 0 && (
               <div className="text-center">No Product Found</div>
             )}
             {products && products.length < total && (

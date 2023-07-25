@@ -68,11 +68,11 @@ const ProductCard = ({ p }) => {
               </Option>
             ))}
           </Select>
-          <button className="btn btn-dark ms-1" onClick={handleAddCart}>
+          <button className="btn add-to-cart-btn ms-1" onClick={handleAddCart}>
             ADD TO CART
           </button>
           <button
-            className="btn btn-info ms-1"
+            className="btn more-details-btn ms-1"
             onClick={() => navigate(`/product/${p.slug}`)}
             // disabled={2 > 1}
           >

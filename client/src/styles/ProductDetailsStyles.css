@@ -5,13 +5,6 @@
   align-items: center;
 }
 
-.similar-products {
-  margin-bottom: 20px !important;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .product-details-info {
   display: flex;
   flex-direction: column;
@@ -38,4 +31,21 @@
   flex: 3;
   margin-right: 10px;
   margin-bottom: 10px;
+}
+
+/*=============================
+similar products 
+=============================== */
+
+.similar-products {
+  margin-bottom: 20px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.similar-product-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }

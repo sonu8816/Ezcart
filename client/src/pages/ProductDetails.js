@@ -120,18 +120,21 @@ const ProductDetails = () => {
         </div>
       </div>
       </div>
+
       <hr />
+
       <div className="similar-products">
-      <div className="row container">
-        <h4>Similar Products ➡️</h4>
-        {relatedProducts.length < 1 && (
-          <p className="text-center">No Similar Products found</p>
-        )}
-        <div className="d-flex flex-wrap">
-          {relatedProducts?.map((p) => (<ProductCard p={p} />))}
+        <div>
+          <h4>Similar Products ➡️</h4>
+          {relatedProducts.length < 1 && (
+            <p className="text-center">No Similar Products found</p>
+          )}
+          <div className="similar-product-container">
+            {relatedProducts?.map((p) => (<ProductCard p={p} />))}
+          </div>
         </div>
       </div>
-      </div>
+
     </Layout>
   );
 };

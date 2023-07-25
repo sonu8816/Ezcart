@@ -7,6 +7,7 @@
 
 .range-slider .wrapper {
   padding-bottom: 20px;
+  flex:1;
 }
 
 .range-slider .price-input {
@@ -25,10 +26,25 @@
   height: 100%;
   outline: none;
   font-size: 19px;
-  margin-left: 12px;
-  border-radius: 5px;
+  border-radius: 0 5px 5px 0;
   text-align: center;
   border: 1px solid #999;
+  /* border-left: none; */
+}
+
+.range-slider .field .input-group-prepend {
+  border-radius: 5px 0 0 5px;
+  border: 1px solid #999;
+  border-right: none;
+  margin-left: 12px;
+  padding: 0;
+}
+
+.range-slider .field .input-group-text {
+  font-size: 20px;
+  background-color: #EFEFEF4D;
+  height: 100%;
+
 }
 
 .range-slider input[type="number"]::-webkit-outer-spin-button,
@@ -37,7 +53,6 @@
 }
 
 .range-slider .slider-bottom {
-  /* border : 1px solid black; */
   background: #16f8e5;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
   padding: 20px 10px;
@@ -47,7 +62,7 @@
 .range-slider .slider {
   height: 10px;
   position: relative;
-  background: #27b817; /*change the color of the remaining slider*/
+  background: #09a8ed;
   border-radius: 5px;
 }
 
@@ -57,7 +72,7 @@
   right: 25%;
   position: absolute;
   border-radius: 5px;
-  background: #09a8ed; /*change the color of the selected part of slider*/
+  background: #095ded;
 }
 
 .range-slider .range-input {
@@ -74,11 +89,12 @@
   -webkit-appearance: none;
 }
 
+/* circle wala  */
 .range-slider input[type="range"]::-webkit-slider-thumb {
   height: 17px;
   width: 17px;
   border-radius: 50%;
-  background: #e32020; /*change the color of the slider button*/
+  background: #e32020;
   pointer-events: auto;
   -webkit-appearance: none;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);

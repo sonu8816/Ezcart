@@ -4,6 +4,7 @@ import orderModel from "../models/orderModel.js";
 import { comparePassword, hashPassword } from "./../helpers/authHelper.js";
 import JWT from "jsonwebtoken";
 
+//POST REGISTER
 export const registerController = async (req, res) => {
   try {
     const { name, email, password, phone, address, answer } = req.body;
@@ -45,12 +46,16 @@ export const registerController = async (req, res) => {
       address,
       password: hashedPassword,
       answer,
-    }).save();
-
+    }).save();   
+    //token
+    const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
     res.status(201).send({
       success: true,
       message: "User Register Successfully",
       user,
+      token,
     });
   } catch (error) {
     console.log(error);

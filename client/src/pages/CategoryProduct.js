@@ -25,10 +25,10 @@ const CategoryProduct = () => {
 
   return (
     <Layout>
-      <div className="container mt-3 category-page">
+      <div className=" mt-3 category-page">
         <h4 className="text-center">Category - {category?.name}</h4>
         <h6 className="text-center">{products?.length} result found </h6>
-        <div className="d-flex flex-wrap">
+        <div className="d-flex flex-wrap justify-content-evenly">
           {products?.map((p) => (<ProductCard p={p} />))}
         </div>
       </div>

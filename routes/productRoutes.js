@@ -4,8 +4,10 @@ import {
   braintreeTokenController,
   createProductController,
   deleteProductController,
+  deleteReviewController,
   getProductController,
   getSingleProductController,
+  postReviewController,
   productCategoryController,
   productCountController,
   productFilterCountController,
@@ -52,28 +54,35 @@ router.get("/product-photo/:pid", productPhotoController);
 //delete product
 router.delete("/delete-product/:pid", deleteProductController);
 
-//filter product count
+//get filter product count
 router.post("/product-filters-count", productFilterCountController);
 
-//filter product
+//get filter product
 router.post("/product-filters/:page", productFiltersController);
 
-//product count
+//get product count
 router.get("/product-count", productCountController);
 
-//product per page
+//get product per page
 router.get("/product-list/:page", productListController);
 
-//search product
+//get search product
 router.get("/search/:keyword", searchProductController);
 
-//similar product
+//get similar product
 router.get("/related-product/:pid/:cid", realtedProductController);
 
-//category wise product
+//get category wise product
 router.get("/product-category/:slug", productCategoryController);
 
-//payments routes
+//********************** review routes **************************//
+//post review
+router.post("/product-review/:pid", requireSignIn, postReviewController);
+
+//delete review
+router.delete("/delete-review/:pid/:rid", requireSignIn, deleteReviewController);
+
+//********************* payments routes *************************//
 //token
 router.get("/braintree/token", braintreeTokenController);
 

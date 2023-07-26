@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Review from "./reviewModel.js";
 
 const productSchema = new mongoose.Schema(
   {
@@ -34,8 +35,25 @@ const productSchema = new mongoose.Schema(
     shipping: {
       type: Boolean,
     },
+    reviews: [
+      {
+        type: mongoose.ObjectId,
+        ref: "Review",
+      },
+    ],
   },
   { timestamps: true }
 );
+
+//delete all reviews when product is deleted
+productSchema.post("findOneAndDelete", async function (doc) {
+  if (doc) {
+    await Review.deleteMany({
+      _id: {
+        $in: doc.reviews,
+      },
+    });
+  }
+});
 
 export default mongoose.model("Products", productSchema);

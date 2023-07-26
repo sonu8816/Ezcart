@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const SearchInput = () => {
-  const [values, setValues] = useSearch();
+  const [values, setValues] = useSearch();      //custom hook
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {

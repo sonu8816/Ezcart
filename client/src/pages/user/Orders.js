@@ -35,6 +35,7 @@ const Orders = () => {
     }
   };
 
+  //get orders
   const getOrders = async () => {
     try {
       const { data } = await axios.get("/api/v1/auth/orders");
@@ -47,6 +48,16 @@ const Orders = () => {
   useEffect(() => {
     if (auth?.token) getOrders();
   }, [auth?.token]);
+
+  //cancel order
+  const handleCancel = async (orderId) => {
+    try {
+      const { data } = await axios.put(`/api/v1/auth/cancel-order/${orderId}`);
+      getOrders();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Layout title={"Your Orders"}>
@@ -61,7 +72,7 @@ const Orders = () => {
               return (
                 <div className="border mb-3 shadow table-responsive">
                   <table className="table">
-                    <thead>
+                    <tbody>
                       <tr  className="table-dark">
                         <th scope="col">#</th>
                         <th scope="col">Status</th>
@@ -69,9 +80,17 @@ const Orders = () => {
                         <th scope="col">Payment</th>
                         <th scope="col">Items</th>
                         <th scope="col">Amount</th>
+                        <th scope="col" className="table-info text-center align-middle" rowSpan="2">
+                          <button
+                            className="btn btn-danger ms-2 order-cancel-btn"
+                            onClick={() => {handleCancel(o._id);}}
+                            disabled={o?.status === "delivered" || o?.status === "cancel"}
+                          >
+                            Cancel Order
+                          </button>
+                        </th>
                       </tr>
-                    </thead>
-                    <tbody>
+
                       <tr  className="table-secondary">
                         <td>{i + 1}</td>
                         <td>{o?.status}</td>

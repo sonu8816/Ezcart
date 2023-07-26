@@ -93,8 +93,8 @@ const PriceRangeSlider = ({ range, setRange }) => {
         <div className="price-input">
           <div className="field">
             <span className="filter-option-text">Min</span>
-            <div class="input-group-prepend">
-              <span class="input-group-text">₹</span>
+            <div className="input-group-prepend">
+              <span className="input-group-text">₹</span>
             </div>
             <input
               type="number"
@@ -106,8 +106,8 @@ const PriceRangeSlider = ({ range, setRange }) => {
           </div>
           <div className="field">
             <span className="filter-option-text">Max</span>
-            <div class="input-group-prepend">
-              <span class="input-group-text">₹</span>
+            <div className="input-group-prepend">
+              <span className="input-group-text">₹</span>
             </div>
             <input
               type="number"

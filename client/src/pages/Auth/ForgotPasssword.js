@@ -33,6 +33,7 @@ const ForgotPasssword = () => {
       toast.error("Something went wrong");
     }
   };
+  
   return (
     <Layout title={"Forgot Password - Ecommerce APP"}>
       <div className="form-container ">
@@ -56,7 +57,7 @@ const ForgotPasssword = () => {
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
               className="form-control"
-              id="exampleInputEmail1"
+              id="exampleAnswer1"
               placeholder="Enter Your favorite Sport Name "
               required
             />
@@ -68,7 +69,7 @@ const ForgotPasssword = () => {
               onChange={(e) => setNewPassword(e.target.value)}
               className="form-control"
               id="exampleInputPassword1"
-              placeholder="Enter Your Password"
+              placeholder="Enter New Password"
               required
             />
           </div>

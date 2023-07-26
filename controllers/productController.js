@@ -1,6 +1,7 @@
 import productModel from "../models/productModel.js";
 import categoryModel from "../models/categoryModel.js";
 import orderModel from "../models/orderModel.js";
+import reviewModel from "../models/reviewModel.js";
 
 import fs from "fs";
 import slugify from "slugify";
@@ -90,7 +91,16 @@ export const getSingleProductController = async (req, res) => {
     const product = await productModel
       .findOne({ slug: req.params.slug })
       .select("-photo")
-      .populate("category");
+      .populate("category")
+      .populate({
+        path : "reviews", 
+        populate : {
+          path : "author"
+        },
+        options: {
+          sort: { updatedAt: -1 } // Sort reviews by updatedAt in descending order (-1)
+        }
+      });
     res.status(200).send({
       success: true,
       message: "Single Product Fetched",
@@ -354,8 +364,63 @@ export const productCategoryController = async (req, res) => {
   }
 };
 
-//payment gateway api
+/***************************** Review Controller *****************************/
+// post review
+export const postReviewController = async (req, res) => {
+  try {
+    const { body, rating } = req.body;
 
+    //validation
+    if(!body) return res.status(400).send({ message : "Body is Required" });
+
+    const review = await new reviewModel({
+      body,
+      rating,
+      author : req.user._id,
+    }).save();
+    
+    const product = await productModel.findById(req.params.pid);
+    product.reviews.push(review);
+    await product.save();
+
+    res.status(200).send({
+      success: true,
+      message: "Review Posted Successfully",
+      review,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "Error While Posting Review",
+      error,
+    });
+  }
+};
+
+// delete review
+export const deleteReviewController = async (req, res) => {
+  try {
+    const { pid, rid } = req.params;
+    await productModel.findByIdAndUpdate(pid, {
+      $pull: { reviews: rid },
+    });
+    await reviewModel.findByIdAndDelete(rid);
+    res.status(200).send({
+      success: true,
+      message: "Review Deleted Successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "Error While Deleting Review",
+      error,
+    });
+  }
+};
+
+/*****************************payment gateway api *****************************/
 //token
 export const braintreeTokenController = async (req, res) => {
   try {

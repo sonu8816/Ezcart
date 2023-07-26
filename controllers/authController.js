@@ -130,7 +130,7 @@ export const forgotPasswordController = async (req, res) => {
     if (!answer) {
       res.status(400).send({ message: "answer is required" });
     }
-    if (!newPassword || password.length < 6) {
+    if (!newPassword || newPassword.length < 6) {
       res.status(400).send({ message: "New passsword is Required and 6 character long" });
     }
     //check
@@ -201,12 +201,12 @@ export const updateProfileController = async (req, res) => {
   }
 };
 
-//orders
+//get orders by user
 export const getOrdersController = async (req, res) => {
   try {
     const orders = await orderModel
       .find({ buyer: req.user._id })
-      // .populate("products.product")     // Populate the 'product' field of the 'products' array
+      // .populate("products.product")     // Simply Populate the 'product' field of the 'products' array
       .populate({
         path: "products.product",
         select: "-photo"                   // Exclude the 'photo' field from the populated product
@@ -224,7 +224,30 @@ export const getOrdersController = async (req, res) => {
   }
 };
 
-//all orders
+//cancel order by user
+export const orderCancelController = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const orders = await orderModel.findOneAndUpdate(
+      {
+        _id: orderId,
+        buyer: req.user._id,
+      },
+      { status: "cancel" },
+      { new: true }
+    );
+    res.json(orders);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error While Cancel Order",
+      error,
+    });
+  }
+};
+
+//get all orders by admin
 export const getAllOrdersController = async (req, res) => {
   try {
     const orders = await orderModel
@@ -246,7 +269,7 @@ export const getAllOrdersController = async (req, res) => {
   }
 };
 
-//order status
+//order status update by admin
 export const orderStatusController = async (req, res) => {
   try {
     const { orderId } = req.params;

@@ -17,6 +17,7 @@ import {
   realtedProductController,
   searchProductController,
   updateProductController,
+  updateReviewController,
 } from "../controllers/productController.js";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 import formidable from "express-formidable";
@@ -78,6 +79,9 @@ router.get("/product-category/:slug", productCategoryController);
 //********************** review routes **************************//
 //post review
 router.post("/product-review/:pid", requireSignIn, postReviewController);
+
+//update review
+router.put("/update-review/:rid", requireSignIn, updateReviewController);
 
 //delete review
 router.delete("/delete-review/:pid/:rid", requireSignIn, deleteReviewController);

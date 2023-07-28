@@ -93,10 +93,6 @@ filters
   background-color: rgba(167, 205, 237, 0.685);
 }
 
-.filters .ant-checkbox-wrapper:first-of-type {
-  margin-left: 8px;
-}
-
 .filters .ant-checkbox-wrapper {
   margin: 2px;
 }

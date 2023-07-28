@@ -1,6 +1,6 @@
 import React from "react";
 
-const ReviewForm = ({ handleSubmit, value, setValue }) => {
+const ReviewForm = ({ handleCreate, handleUpdate ,isUpdate, value, setValue }) => {
   const handleChange = (event) => {
     const newValue = Number(event.target.value);
     setValue({ ...value, rating: newValue });
@@ -8,7 +8,7 @@ const ReviewForm = ({ handleSubmit, value, setValue }) => {
 
   return (
     <div className="">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={isUpdate ? handleUpdate : handleCreate}>
         <fieldset className="starability-basic pb-0 mb-0" required>
           <input
             type="radio"
@@ -97,7 +97,7 @@ const ReviewForm = ({ handleSubmit, value, setValue }) => {
         </div>
         <div className="form-group d-flex justify-content-center align-items-center">
           <button type="submit" className="btn btn-success">
-            Submit
+            {isUpdate ? "Update" : "Submit"}
           </button>
         </div>
       </form>

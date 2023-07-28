@@ -22,7 +22,7 @@ const AdminOrders = () => {
   const totalPrice = (products) => {
     try {
       let total = 0;
-      products?.map((item) => total = total + item.product.price * item.count );
+      products?.map((item) => total = total + item?.product?.price * item?.count );
       return total.toLocaleString("en-US", {
         style: "currency",
         currency: "INR",
@@ -119,22 +119,23 @@ const AdminOrders = () => {
                 </table>
 
                 <div className="container">
-                  {o?.products?.map((item, i) => (
-                    <div className="row mb-2 p-3 card flex-row" key={item.product._id}>
+                  {o?.products?.map((item) => (
+                    <div className="row mb-2 p-3 card flex-row" key={item?.product?._id}>
                       <div className="col-md-4">
+                        { item?.product &&
                         <img
-                          src={`/api/v1/product/product-photo/${item.product._id}`}
+                          src={`/api/v1/product/product-photo/${item?.product?._id}`}
                           className="card-img-top"
                           alt={item.product.name}
                           width="100px"
                           height={"160px"}
-                        />
+                        />}
                       </div>
                       <div className="col-md-8">
-                        <p>{item.product.name}</p>
-                        <p>{item.product.description.substring(0, 30)}...</p>
-                        <p>Price : ₹{item.product.price}</p>
-                        <p>Quantity : {item.count}</p>
+                        <p>{item?.product?.name}</p>
+                        <p>{item?.product?.description.substring(0, 30)}...</p>
+                        <p>Price : ₹{item?.product?.price}</p>
+                        <p>Quantity : {item?.count}</p>
                       </div>
                     </div>
                   ))}

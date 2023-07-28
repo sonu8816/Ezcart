@@ -184,7 +184,7 @@ const HomePage = () => {
         <div className="col-md-9 ">  
           <h1 className="text-center">All Products</h1>
           
-          <div className="d-flex flex-wrap allProduct">
+          <div className="allProduct">
             {products?.map((p) => (<ProductCard p={p} />))}
           </div>
 

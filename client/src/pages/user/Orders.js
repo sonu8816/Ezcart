@@ -80,15 +80,16 @@ const Orders = () => {
                         <th scope="col">Payment</th>
                         <th scope="col">Items</th>
                         <th scope="col">Amount</th>
-                        <th scope="col" className="table-info text-center align-middle" rowSpan="2">
-                          <button
-                            className="btn btn-danger ms-2 order-cancel-btn"
-                            onClick={() => {handleCancel(o._id);}}
-                            disabled={o?.status === "delivered" || o?.status === "cancel"}
-                          >
-                            Cancel Order
-                          </button>
-                        </th>
+                        {o?.status !== "delivered" && o?.status !== "cancel" &&
+                          <th scope="col" className="table-info text-center align-middle" rowSpan="2">
+                            <button
+                              className="btn btn-danger ms-2 order-cancel-btn"
+                              onClick={() => {handleCancel(o._id);}}
+                            >
+                              Cancel Order
+                            </button>
+                          </th>
+                        }
                       </tr>
 
                       <tr  className="table-secondary">

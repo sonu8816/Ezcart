@@ -398,14 +398,61 @@ export const postReviewController = async (req, res) => {
   }
 };
 
+// update review
+export const updateReviewController = async (req, res) => {
+  try {
+    const { rid } = req.params;
+    const { body, rating } = req.body;
+
+    //validation
+    if(!body) return res.status(400).send({ message : "Body is Required" });
+    if(!rid) return res.status(400).send({ message : "Review ID is Required" });
+    const review = await reviewModel.findById(rid);
+    if (!review) return res.status(404).send({ message: "Review not found" });    
+    if (req.user._id.toString() !== review.author.toString()) {
+      return res.status(403).send({message: "You are not authorized to update this review"});
+    }
+
+    // Update the review
+    review.body = body;
+    review.rating = rating;
+    await review.save();
+
+    res.status(200).send({
+      success: true,
+      message: "Review Updated Successfully",
+      review,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "Error While Updating Review",
+      error,
+    });
+  }
+};
+
 // delete review
 export const deleteReviewController = async (req, res) => {
   try {
     const { pid, rid } = req.params;
+    
+    //validation
+    if(!pid) return res.status(400).send({ message : "Product ID is Required" });
+    if(!rid) return res.status(400).send({ message : "Review ID is Required" });
+    const review = await reviewModel.findById(rid);
+    if (!review) return res.status(404).send({ message: "Review not found" });
+    if (req.user._id.toString() !== review.author.toString()) {
+      return res.status(403).send({ message: "You are not authorized to delete this review" });
+    }
+
+    // Delete the review
     await productModel.findByIdAndUpdate(pid, {
       $pull: { reviews: rid },
     });
     await reviewModel.findByIdAndDelete(rid);
+
     res.status(200).send({
       success: true,
       message: "Review Deleted Successfully",

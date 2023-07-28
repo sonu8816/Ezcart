@@ -39,10 +39,11 @@ const ProductCard = ({ p }) => {
       localStorage.setItem("cart", JSON.stringify(updatedCart));
       toast.success(`${p.name} added to cart`);
     }
+    setQuantity(1);
   };
 
   return (
-    <div className="card card-component m-2" key={p._id}>
+    <div className="card card-component my-2" key={p._id}>
       <Link key={p._id} to={`/product/${p.slug}`} className="product-link">
         <img
           src={`/api/v1/product/product-photo/${p._id}`}

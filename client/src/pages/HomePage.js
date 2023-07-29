@@ -13,7 +13,9 @@ import PriceRangeSlider from "../components/RangeSlider";
 const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [checked, setChecked] = useState([]);
+  const [ichecked, setiChecked] = useState([]);  //for input checkbox store
   const [radio, setRadio] = useState([]);
+  const [iradio, setiRadio] = useState([]);      //for input radio store
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -23,13 +25,13 @@ const HomePage = () => {
   
   // filter by category
   const handleFilterByCategory = (value, id) => {
-    let all = [...checked];
+    let all = [...ichecked];
     if (value) {     /* if we select the checkbox */
       all.push(id);
     } else {        /* if we deselect the checkbox */
       all = all.filter((c) => c !== id);
     }
-    setChecked(all);
+    setiChecked(all);
   };
 
   // getFilterTOtal Count
@@ -61,32 +63,38 @@ const HomePage = () => {
       setLoading(false);
     }
   };
-  
-  // Apply all filters
+
+  const areArraysEqual = (array1, array2) => {
+    if (array1.length !== array2.length) return false;
+    array1.sort();
+    array2.sort();
+    for (let i = 0; i < array1.length; i++) {
+      if (array1[i] !== array2[i]) return false;
+    }
+    return true;
+  };
+    
   const handleApplyFilter = () => {
-    if(page===1){
-      getTotal();
-      loadMore();
-    } else {
+    if(areArraysEqual(checked, ichecked) && areArraysEqual(radio, iradio)) return;
+    setChecked([...ichecked]);
+    setRadio([...iradio]);
+    setPage(1);
+  };
+  
+  const handleReset = () => {
+    setiRadio([]); 
+    setiChecked([]); 
+    if(checked.length || radio.length){
+      setChecked([]);
+      setRadio([]);
       setPage(1);
     }
   };
-  
-  // Reset all filters
-  const handleReset = () => {
-    setRadio([]); 
-    setChecked([]); 
-  };
-
-  // All Products show karne ke liye
-  useEffect(() => {
-    if(!radio.length && !checked.length) handleApplyFilter();
-  }, [radio, checked]);
 
   useEffect(() => {
     if(page===1) getTotal();
     loadMore();
-  }, [page]);
+  }, [page, radio, checked]);
 
   return (
     <Layout title={"ALL Products - Best offers "}>
@@ -109,7 +117,7 @@ const HomePage = () => {
                   {categories?.map((c) => (
                     <Checkbox
                       key={c._id}
-                      checked={checked.includes(c._id)}
+                      checked={ichecked.includes(c._id)}
                       onChange={(e) => handleFilterByCategory(e.target.checked, c._id)}
                       className="filter-option-text"
                     >
@@ -131,7 +139,7 @@ const HomePage = () => {
               </h2>
               <div id="panelsStayOpen-collapseTwo" className="accordion-collapse collapse">
                 <div className="accordion-body d-flex flex-column">
-                  <Radio.Group value={radio} onChange={(e) => setRadio(e.target.value)}>
+                  <Radio.Group value={iradio} onChange={(e) => setiRadio(e.target.value)}>
                     {Prices?.map((p) => (
                       <div key={p._id}>
                         <Radio value={p.array} className="filter-option-text">{p.name}</Radio>
@@ -153,7 +161,7 @@ const HomePage = () => {
               </h2>
               <div id="panelsStayOpen-collapseThree" className="accordion-collapse collapse">
                 <div className="accordion-body d-flex flex-column">
-                  <PriceRangeSlider range={radio} setRange={setRadio} />
+                  <PriceRangeSlider range={iradio} setRange={setiRadio} />
                 </div>
               </div>
             </div>
@@ -179,6 +187,7 @@ const HomePage = () => {
             </button>
           </div>
 
+          <h5> Page {page} of {Math.ceil(total / 9)}</h5>
         </div>
 
         <div className="col-md-9 ">  

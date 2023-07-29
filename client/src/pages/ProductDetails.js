@@ -3,7 +3,7 @@ import Layout from "./../components/Layout/Layout";
 import axios from "axios";
 import { useCart } from "../context/cart";
 import { useAuth } from "../context/auth";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "../styles/ProductDetailsStyles.css";
 import "../styles/Star.css";
 import toast from "react-hot-toast";
@@ -14,7 +14,11 @@ import moment from "moment";
 const { Option } = Select;
 
 const ProductDetails = () => {
+  const [auth] = useAuth();                                    //custom hook
+  const params = useParams();
+  const navigate = useNavigate();
   const [cart, setCart] = useCart();
+  
   const [product, setProduct] = useState({});
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [quantity, setQuantity] = useState(1);                 //for quantity of product to add in cart
@@ -22,9 +26,6 @@ const ProductDetails = () => {
   const [userReview, setUserReview] = useState({});            //for store user review (if exists)
   const [showReviewForm, setShowReviewForm] = useState(false); //for review form visibility
   
-  const [auth] = useAuth();                                    //custom hook
-  const params = useParams();
-
   // Check if the user has reviewed the product
   const checkUserReview = (product) => {
     const userReviewExists = product?.reviews?.find(r => r?.author?._id === auth?.user?._id);
@@ -199,6 +200,11 @@ const ProductDetails = () => {
                   </Option>
                 ))}
               </Select>
+              {auth?.user?.role === 1 && (
+              <button className="btn btn-primary ms-1" onClick= {() => navigate(`/dashboard/admin/product/${product?.slug}`)}>
+                Edit Product
+              </button>
+              )}
               <button className="btn btn-dark ms-1" onClick={handleAddCart}>
                 ADD TO CART
               </button>
@@ -208,54 +214,58 @@ const ProductDetails = () => {
       </div>
 
       <hr/>
-
+      
+      {/* similar products */}
       <h3 className="text-center">Similar Products ➡️</h3>
-          {relatedProducts?.length < 1 && (
-            <p className="text-center">No Similar Products found</p>
-          )}
+      {relatedProducts?.length < 1 && (
+        <p className="text-center">No Similar Products found</p>
+      )}
       <div className="container-fluid similar-products">
-            {relatedProducts?.map((p) => (<ProductCard p={p} />))}
+        {relatedProducts?.map((p) => (<ProductCard p={p} />))}
       </div>
 
       <hr className="mb-0"/>
 
+      {/* product reviews */}
       <div className="container-fluid row  product-review"> 
-        <div className="col-md-4 my-3 user-review ">
-          {showReviewForm ? (
-            <div className="conatainer">
-              <h4>Leave a Review</h4>
-              <ReviewForm
-                handleCreate={handleCreate}
-                handleUpdate={handleUpdate}
-                const isUpdate = {Object.entries(userReview).length > 0}
-                value={review}
-                setValue={setReview}
-              />
-            </div>
-          ) : (
-            <div className="conatainer">
-              <h4>Your Review</h4>
-              <div className="card my-2 mx-1">
-                <h5 className="card-header">{auth?.user?.name}</h5>
-                <div className="card-body">
-                  <p className="starability-result" data-rating={userReview?.rating}>
-                    Rated: {userReview?.rating} stars
-                  </p>
-                  <p className="card-text mt-3">{userReview?.body}</p>
-                  <div className="button-container">
-                    <button className="btn btn-primary b1" onClick={() => {setShowReviewForm(true)}}>Edit</button>
-                    <button className="btn btn-danger b2" onClick={() => handleDelete(userReview?._id)}>Delete</button>
+        {auth?.user && (
+          <div className="col-md-4 my-3 user-review ">
+            {showReviewForm ? (
+              <div className="conatainer">
+                <h4>Leave a Review</h4>
+                <ReviewForm
+                  handleCreate={handleCreate}
+                  handleUpdate={handleUpdate}
+                  const isUpdate = {Object.entries(userReview).length > 0}
+                  value={review}
+                  setValue={setReview}
+                />
+              </div>
+            ) : (
+              <div className="conatainer">
+                <h4>Your Review</h4>
+                <div className="card my-2 mx-1">
+                  <h5 className="card-header">{auth?.user?.name}</h5>
+                  <div className="card-body">
+                    <p className="starability-result" data-rating={userReview?.rating}>
+                      Rated: {userReview?.rating} stars
+                    </p>
+                    <p className="card-text mt-3">{userReview?.body}</p>
+                    <div className="button-container">
+                      <button className="btn btn-primary b1" onClick={() => {setShowReviewForm(true)}}>Edit</button>
+                      <button className="btn btn-danger b2" onClick={() => handleDelete(userReview?._id)}>Delete</button>
+                    </div>
+                  </div>
+                  <div className="card-footer text-muted">
+                   {moment(userReview?.updatedAt).fromNow()}
                   </div>
                 </div>
-                <div class="card-footer text-muted">
-                 {moment(userReview?.updatedAt).fromNow()}
-                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
 
-        <div className="col-md-8 border-left">
+        <div className={auth?.user ? "col-md-8 border-left" : "col-md-12"}>
           <h3 className="text-center mt-3">Product Reviews</h3>
           {(!product?.reviews?.length || (product?.reviews?.length === 1 && Object.keys(userReview).length !== 0)) && (
             <p className="text-center">No other users Review found</p>
@@ -271,7 +281,7 @@ const ProductDetails = () => {
                   </p>
                   <p className="card-text mt-3">{r?.body}</p>
                 </div>
-                <div class="card-footer text-muted">
+                <div className="card-footer text-muted">
                   {moment(r?.updatedAt).fromNow()}
                 </div>
               </div>

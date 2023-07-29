@@ -68,6 +68,7 @@ export const getProductController = async (req, res) => {
       .find({})
       .populate("category")
       .select("-photo")
+      .select("-reviews")
       .sort({ createdAt: -1 });
     res.status(200).send({
       success: true,
@@ -213,6 +214,7 @@ export const productFiltersController = async (req, res) => {
     const products = await productModel
       .find(args)
       .select("-photo")
+      .select("-reviews")
       .populate("category")
       .skip((page - 1) * perPage)
       .limit(perPage)
@@ -279,6 +281,7 @@ export const productListController = async (req, res) => {
     const products = await productModel
       .find({})
       .select("-photo")
+      .select("-reviews")
       .skip((page - 1) * perPage)
       .limit(perPage)
       .sort({ createdAt: -1 });
@@ -306,7 +309,8 @@ export const searchProductController = async (req, res) => {
           { description: { $regex: keyword, $options: "i" } },
         ],
       })
-      .select("-photo");
+      .select("-photo")
+      .select("-reviews");
     res.json(results);
   } catch (error) {
     console.log(error);
@@ -328,6 +332,7 @@ export const realtedProductController = async (req, res) => {
         _id: { $ne: pid },
       })
       .select("-photo")
+      .select("-reviews")
       .limit(4)
       .populate("category");
     res.status(200).send({
@@ -348,7 +353,12 @@ export const realtedProductController = async (req, res) => {
 export const productCategoryController = async (req, res) => {
   try {
     const category = await categoryModel.findOne({ slug: req.params.slug });
-    const products = await productModel.find({ category }).populate("category");
+    const products = await productModel
+      .find({ category })
+      .populate("category")
+      .select("-photo")
+      .select("-reviews");
+      
     res.status(200).send({
       success: true,
       category,
@@ -369,17 +379,24 @@ export const productCategoryController = async (req, res) => {
 export const postReviewController = async (req, res) => {
   try {
     const { body, rating } = req.body;
+    const productId = req.params.pid;
+    const userId = req.user._id;
 
     //validation
+    const product = await productModel.findById(productId).populate("reviews");
+    const userHasReview = product.reviews.some(review => review.author.equals(userId));
+    if (userHasReview) {
+      return res.status(409).send({ message: "Review already posted for this product" });
+    }
     if(!body) return res.status(400).send({ message : "Body is Required" });
 
+    //save review
     const review = await new reviewModel({
       body,
       rating,
       author : req.user._id,
     }).save();
     
-    const product = await productModel.findById(req.params.pid);
     product.reviews.push(review);
     await product.save();
 

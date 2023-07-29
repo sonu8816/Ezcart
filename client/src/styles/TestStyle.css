@@ -1,95 +1,115 @@
-/* .range-slider {
+.H_dash {
+  margin-top: 60px !important;
+}
+
+.home-page {
+  margin: 0         !important;
+  padding: 0;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
 }
 
-.range-slider .wrapper {
-  padding-bottom: 20px;
-}
-
-.range-slider .price-input {
-  margin-bottom: 15px;
-}
-
-.range-slider .price-input .field {
+.home-page .allProduct {
   display: flex;
-  height: 45px;
-  margin: 10px;
-  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 
-.range-slider .field input {
-  width: 100%;
-  height: 100%;
-  outline: none;
-  font-size: 19px;
-  margin-left: 12px;
-  border-radius: 5px;
-  text-align: center;
-  border: 1px solid #999;
+.home-page h1 {
+  color: gray;
+  font-family: "Playfair Display", serif;
 }
 
-.range-slider input[type="number"]::-webkit-outer-spin-button,
-.range-slider input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
+/* ==================
+filters
+===================== */
+
+.filters {
+  /* background-color: #1a3f46; */
+  background-color: #406cae;
+  margin-bottom: 40px;
 }
 
-.range-slider .slider-bottom {
-  background: #16f8e5;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
-  padding: 20px 10px;
-  border-radius: 10px;
+/* big screen Sidebar break */
+@media (min-width: 768px) {
+.filters {
+  position: sticky;
+  top: 0px;
+  bottom: 0px;
+  margin-bottom: 0px;
+  height: 100vh;
+  padding-top:75px ;
+  z-index: 2;
+  align-self: flex-start;
+  overflow: auto;
+}
 }
 
-.range-slider .slider {
-  height: 10px;
-  position: relative;
-  background: #05abf2e1;
-  border-radius: 5px;
+.filters .apply-button {
+  background-color: rgb(20, 182, 39);
+  color: rgb(2, 8, 18);
+  border-radius: 30px;
+  padding: 0.5rem 0px;
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 600;
 }
 
-.range-slider .slider .progress {
-  height: 100%;
-  left: 25%;
-  right: 25%;
-  position: absolute;
-  border-radius: 5px;
-  background: #6057e2;
+.filters .apply-button:hover {
+  background-color: rgb(25, 156, 91);
 }
 
-.range-slider .range-input {
-  position: relative;
+.filters .reset-button {
+  background-color: rgb(243, 128, 34);
+  color: rgb(2, 8, 18);
+  border-radius: 30px;
+  padding: 0.5rem 0px;
+  margin-bottom: 30px;
+  font-size: 20px;
+  font-weight: 600;
 }
 
-.range-slider .range-input input {
-  position: absolute;
-  width: 100%;
-  height: 1px;
-  top: -5px;
-  background: none;
-  pointer-events: none;
-  -webkit-appearance: none;
+.filters .reset-button:hover {
+  background-color: rgb(235, 156, 91);
 }
 
-.range-slider input[type="range"]::-webkit-slider-thumb {
-  height: 17px;
-  width: 17px;
-  border-radius: 50%;
-  background: #6c767e;
-  pointer-events: auto;
-  -webkit-appearance: none;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+.filters .filter-option-text {
+  font-size: 20px;
 }
 
-.range-slider input[type="range"]::-moz-range-thumb {
-  height: 17px;
-  width: 17px;
-  border: none;
-  border-radius: 50%;
-  background: #e32020;
-  pointer-events: auto;
-  -moz-appearance: none;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
-} */
+.filters .accordion-button {
+  background-color: rgba(104, 227, 245, 0.685);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.filters .collapsed {
+  background-color: rgba(104, 227, 245, 0.685);
+}
+
+.filters .accordion-collapse {
+  background-color: rgba(167, 205, 237, 0.685);
+}
+
+.filters .ant-checkbox-wrapper {
+  margin: 2px;
+}
+
+.filters .ant-radio-wrapper {
+  margin-bottom: 5px !important;
+  margin-left: 10px;
+}
+
+.filters .ant-checkbox .ant-checkbox-inner {
+  width: 20px;
+  height: 20px;
+  border-color: red;
+}
+
+.filters .ant-radio-wrapper .ant-radio-inner {
+  width: 20px;
+  height: 20px;
+  border-color: red;
+}

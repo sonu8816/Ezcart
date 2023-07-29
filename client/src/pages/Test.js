@@ -1,136 +1,412 @@
-// import React, { useState, useEffect, useRef } from "react";
-// import "../styles/TestStyle.css";
+import React, { useState, useEffect, useRef } from "react";
+import { Checkbox, Radio } from "antd";
+import { Prices } from "../components/Prices";
+import axios from "axios";
+import Layout from "./../components/Layout/Layout";
+import { AiOutlineReload } from "react-icons/ai";
+import "../styles/TestStyle.css";
+import useCategory from "../hooks/useCategory";
+import ImageSlider from "../components/ImageSlider";
+import ProductCard from "../components/ProductCard";
+import PriceRangeSlider from "../components/RangeSlider";
 
-// const PriceRangeSlider = () => {
-//   const [minPrice, setMinPrice] = useState(0);
-//   const [maxPrice, setMaxPrice] = useState(10000);
-//   const priceGap = 1000;
-//   const rangeRef = useRef(null);
+const HomePage = () => {
+  const [products, setProducts] = useState([]);
+  const [checked, setChecked] = useState([]);
+  const [ichecked, setiChecked] = useState([]);  //for input checkbox store
+  const [radio, setRadio] = useState([]);
+  const [iradio, setiRadio] = useState([]);      //for input radio store
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  //get all category
+  const categories = useCategory(); //custom hook
+  const loadMoreRef = useRef(null); // Ref to the "Load More" button
+
+  // filter by category
+  const handleFilterByCategory = (value, id) => {
+    let all = [...ichecked];
+    if (value) {
+      /* if we select the checkbox */
+      all.push(id);
+    } else {
+      /* if we deselect the checkbox */
+      all = all.filter((c) => c !== id);
+    }
+    setiChecked(all);
+  };
+
+  //loadmore product
+  const loadMore = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        `/api/v1/product/product-filters/${page}`,
+        {
+          checked,
+          radio,
+        }
+      );
+      setLoading(false);
+      // if (page === 1) {
+      //   setProducts([...data?.products]);
+      // } else {
+        setProducts((prevProducts) => [...prevProducts, ...data?.products]);
+      // }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  const getTotal = async () => {
+    try {
+      const { data } = await axios.post(
+        "/api/v1/product/product-filters-count",
+        { checked, radio }
+      );
+      setTotal(data?.total);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const areArraysEqual = (array1, array2) => {
+    if (array1.length !== array2.length) return false;
+    array1.sort();
+    array2.sort();
+    for (let i = 0; i < array1.length; i++) {
+      if (array1[i] !== array2[i]) return false;
+    }
+    return true;
+  };
+    
+  const handleApplyFilter = () => {
+    if(areArraysEqual(checked, ichecked) && areArraysEqual(radio, iradio)) return;
+    setChecked([...ichecked]);
+    setRadio([...iradio]);
+    setPage(0);
+  };
+  
+  const handleReset = () => {
+    setiRadio([]); 
+    setiChecked([]); 
+    if(checked.length || radio.length){
+      setChecked([]);
+      setRadio([]);
+      setPage(0);
+    }
+  };
+
+  const handleIntersection = (entries) => {
+    if (entries[0].isIntersecting && !loading && products.length < total) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleIntersection, {
+      root: null,
+      rootMargin: "0px", // margin around the root. Values are similar to css property. Unitless values not allowed
+      threshold: 1, // between 0 and 1.0
+    });
+
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+
+    return () => {
+      if (loadMoreRef.current) {
+        observer.unobserve(loadMoreRef.current);
+      }
+    };
+  }, [total]);
+
+  useEffect(() => {
+    if (page === 0) getTotal();
+    else loadMore();
+  }, [page, checked, radio]);
+
+  // useEffect(() => {
+  //   if (products.length === 0) return window.scrollTo({ top: 0, behavior: 'smooth' });
+  // }, [products]);
+
+  useEffect(() => {
+    setProducts([]);
+    setPage(0);
+  }, [checked, radio]);
+
+  return (
+    <Layout title={"ALL Products - Best offers "}>
+      <div className="H_dash">
+        <ImageSlider />
+
+        <div className="container-fluid row mt-3 home-page">
+          <div className="col-md-3 filters">
+            {/* category filter  */}
+            <div className="accordion my-3">
+              <div className="accordion-item">
+                <h2 className="accordion-header">
+                  <button
+                    className="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#panelsStayOpen-collapseOne"
+                    aria-expanded="false"
+                    aria-controls="panelsStayOpen-collapseOne"
+                  >
+                    Filter By Category
+                  </button>
+                </h2>
+                <div
+                  id="panelsStayOpen-collapseOne"
+                  className="accordion-collapse collapse"
+                >
+                  <div className="accordion-body d-flex flex-column">
+                    {categories?.map((c) => (
+                      <Checkbox
+                        key={c._id}
+                        checked={ichecked.includes(c._id)}
+                        onChange={(e) =>
+                          handleFilterByCategory(e.target.checked, c._id)
+                        }
+                        className="filter-option-text"
+                      >
+                        {c.name}
+                      </Checkbox>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* price filter */}
+            <div className="accordion mb-3">
+              <div className="accordion-item">
+                <h2 className="accordion-header">
+                  <button
+                    className="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#panelsStayOpen-collapseTwo"
+                    aria-expanded="false"
+                    aria-controls="panelsStayOpen-collapseTwo"
+                  >
+                    Filter By Price
+                  </button>
+                </h2>
+                <div
+                  id="panelsStayOpen-collapseTwo"
+                  className="accordion-collapse collapse"
+                >
+                  <div className="accordion-body d-flex flex-column">
+                    <Radio.Group
+                      value={iradio}
+                      onChange={(e) => setiRadio(e.target.value)}
+                    >
+                      {Prices?.map((p) => (
+                        <div key={p._id}>
+                          <Radio value={p.array} className="filter-option-text">
+                            {p.name}
+                          </Radio>
+                        </div>
+                      ))}
+                    </Radio.Group>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Range filter */}
+            <div className="accordion mb-3">
+              <div className="accordion-item">
+                <h2 className="accordion-header">
+                  <button
+                    className="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#panelsStayOpen-collapseThree"
+                    aria-expanded="false"
+                    aria-controls="panelsStayOpen-collapseThree"
+                  >
+                    Filter By Range
+                  </button>
+                </h2>
+                <div
+                  id="panelsStayOpen-collapseThree"
+                  className="accordion-collapse collapse"
+                >
+                  <div className="accordion-body d-flex flex-column">
+                    <PriceRangeSlider range={iradio} setRange={setiRadio} />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Apply filter */}
+            <div className="d-flex flex-column">
+              <button
+                className="btn apply-button"
+                onClick={() => handleApplyFilter()}
+              >
+                APPLY FILTERS
+              </button>
+            </div>
+
+            {/* Reset filter */}
+            <div className="d-flex flex-column">
+              <button
+                className="btn reset-button"
+                onClick={() => handleReset()}
+              >
+                RESET FILTERS
+              </button>
+            </div>
+
+            <h5>Showing {products.length} of {total} </h5>
+            <h5> Page {page} of {Math.ceil(total / 9)}</h5>
+          </div>
+
+          <div className="col-md-9 my-2">
+            <h1 className="text-center">All Products</h1>
+            <div className="allProduct">
+              {products?.map((p) => (
+                <ProductCard p={p} key={p._id} />
+              ))}
+            </div>
+              
+            {products && products.length < total && (
+              <h3 className="text-center m-5" ref={loadMoreRef}> 
+                Loading...
+              </h3>
+            )} 
+          </div>
+        </div>
+      </div>
+    </Layout>
+  );
+};
+
+export default HomePage;
+
+// ******************** Working Code Without Filter ********************************
+
+// import React, { useState, useEffect, useRef } from "react";
+// import axios from "axios";
+// import Layout from "./../components/Layout/Layout";
+// import { AiOutlineReload } from "react-icons/ai";
+// import "../styles/Homepage.css";
+// import ImageSlider from "../components/ImageSlider";
+// import ProductCard from "../components/ProductCard";
+
+// const HomePage = () => {
+//   const [products, setProducts] = useState([]);
+//   const [total, setTotal] = useState(0);
+//   const [page, setPage] = useState(0);
+//   const [loading, setLoading] = useState(false);
+
+//   const checked = [];
+//   const radio = [];
+
+//   const loadMoreRef = useRef(null); // Ref to the "Load More" button
+
+//   const loadMore = async () => {
+//     try {
+//       setLoading(true);
+//       const { data } = await axios.post(`/api/v1/product/product-filters/${page}`, {
+//         checked,
+//         radio,
+//       });
+//       setLoading(false);
+//       if (page === 1) {
+//         setProducts([...data?.products]);
+//       } else {
+//         setProducts((prevProducts) => [...prevProducts, ...data?.products]);
+//       }
+//     } catch (error) {
+//       console.log(error);
+//       setLoading(false);
+//     }
+//   };
+
+//   const handleIntersection = (entries) => {
+//     if (entries[0].isIntersecting && !loading && products.length < total) {
+//       setPage((prevPage) => prevPage + 1);
+//     }
+//   };
 
 //   useEffect(() => {
-//     updateRange();
-//     // setRange([minPrice, maxPrice]);
-//   }, [minPrice, maxPrice]);
+//     const observer = new IntersectionObserver(handleIntersection, {
+//       root: null,
+//       rootMargin: "0px",         // margin around the root. Values are similar to css property. Unitless values not allowed
+//       threshold: 1,                   // between 0 and 1.0
+//     });
 
-//   const handleMinInputChange = (event) => {
-//     let min = parseInt(event.target.value, 10);
-//     if (min > maxPrice - priceGap) {
-//       min = maxPrice - priceGap;
-//     } else if (min < 0) {
-//       min = 0;
+//     if (loadMoreRef.current) {
+//       observer.observe(loadMoreRef.current);
 //     }
-//     setMinPrice(min);
-//   };
 
-//   const handleMaxInputChange = (event) => {
-//     let max = parseInt(event.target.value, 10);
-//     if (max < minPrice + priceGap) {
-//       max = minPrice + priceGap;
-//     } else if (max > 10000) {
-//       max = 10000;
-//     }
-//     setMaxPrice(max);
-//   };
+//     return () => {
+//       if (loadMoreRef.current) {
+//         observer.unobserve(loadMoreRef.current);
+//       }
+//     };
+//   }, [ total]);
 
-//   const handlePointerClick = (event) => {
-//     const rect = rangeRef.current.getBoundingClientRect();
-//     const clickX = event.clientX - rect.left;
-//     const totalWidth = rect.right - rect.left;
-//     const minDistance = Math.abs(clickX - (minPrice / 10000) * totalWidth);
-//     const maxDistance = Math.abs(clickX - (maxPrice / 10000) * totalWidth);
+//   useEffect(() => {
+//     const getTotal = async () => {
+//       try {
+//         const { data } = await axios.post("/api/v1/product/product-filters-count",{  checked,  radio,});
+//         setTotal(data?.total);
 
-//     let val = Math.floor((clickX / totalWidth) * 10000);
+//       } catch (error) {
+//         console.log(error);
+//       }
+//     };
 
-//     if (minDistance < maxDistance) {
-//         if (val > maxPrice - priceGap) {
-//             val = maxPrice - priceGap;
-//         } else if (val < 0) {
-//             val = 0;
-//         }
-//         setMinPrice(val);
+//     if (page === 0) {
+//       getTotal();
 //     } else {
-//         if (val < minPrice + priceGap) {
-//           val = minPrice + priceGap;
-//         } else if (val > 10000) {
-//           val = 10000;
-//         }
-//         setMaxPrice(val);
+//       loadMore();
 //     }
-//   };
-
-//   const updateRange = () => {
-//     const rangeInput = document.querySelectorAll(".range-input input");
-//     const range = document.querySelector(".slider .progress");
-
-//     rangeInput[0].value = parseInt(rangeInput[0].value, 10);
-//     rangeInput[1].value = parseInt(rangeInput[1].value, 10);
-
-//     const leftPercentage = (minPrice / rangeInput[0].max) * 100;
-//     const rightPercentage = 100 - (maxPrice / rangeInput[1].max) * 100;
-
-//     range.style.left = `${leftPercentage}%`;
-//     range.style.right = `${rightPercentage}%`;
-//   };
+//   }, [page]);
 
 //   return (
-//     <div className="range-slider">
-//       <div className="wrapper">
-//         <div className="price-input">
-//           <div className="field">
-//             <span className="filter-option-text">Min</span>
-//             <input
-//               type="number"
-//               className="input-min"
-//               value={minPrice}
-//             //   onChange={handleMinInputChange}
-//               disabled={true}
-//             />
-//           </div>
-//           <div className="field">
-//             <span className="filter-option-text">Max</span>
-//             <input
-//               type="number"
-//               className="input-max"
-//               value={maxPrice}
-//             //   onChange={handleMaxInputChange}
-//               disabled={true}
-//             />
-//           </div>
-//         </div>
+//     <Layout title={"ALL Products - Best offers "}>
+//       <div className="H_dash">
+//         <ImageSlider />
 
-//         <div className="slider-bottom">
-//             <div className="slider" 
-//                 onClick={handlePointerClick}
-//                 ref={rangeRef}
-//             >
-//               <div className="progress"></div>
+//         <div className="container-fluid row mt-3 home-page">
+//           <div className="col-md-3 filters">
+//             <h2>ALL Filters here</h2>
+//             <h5>Showing {products.length} of {total}</h5>
+//             <h5>page {page}</h5>
+//           </div>
+
+//           <div className="col-md-9">
+//             <h1 className="text-center">All Products</h1>
+//             <div className="allProduct">
+//               {products?.map((p) => (
+//                 <ProductCard p={p} key={p._id} />
+//               ))}
 //             </div>
 
-//             <div className="range-input">
-//               <input
-//                 type="range"
-//                 className="range-min"
-//                 min="0"
-//                 max="10000"
-//                 value={minPrice}
-//                 step="100"
-//                 onChange={handleMinInputChange}
-//               />
-//               <input
-//                 type="range"
-//                 className="range-max"
-//                 min="0"
-//                 max="10000"
-//                 value={maxPrice}
-//                 step="100"
-//                 onChange={handleMaxInputChange}
-//               />
+//             <div className="m-2 p-3">
+//               {products && products.length < total && (
+//                   <button
+//                     className="btn loadmore"
+//                     ref={loadMoreRef} // Ref to the "Load More" button
+//                   >
+//                     {loading ? "Loading ..." : "Loadmore"} <AiOutlineReload />
+//                   </button>
+//               )}
 //             </div>
+//           </div>
 //         </div>
-
 //       </div>
-//     </div>
+//     </Layout>
 //   );
 // };
 
-// export default PriceRangeSlider;
+// export default HomePage;

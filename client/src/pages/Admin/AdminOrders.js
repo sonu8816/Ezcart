@@ -4,6 +4,7 @@ import AdminMenu from "../../components/Layout/AdminMenu";
 import Layout from "../../components/Layout/Layout";
 import { useAuth } from "../../context/auth";
 import moment from "moment";
+import { Link } from "react-router-dom";
 import { Select } from "antd";
 const { Option } = Select;
 
@@ -80,7 +81,7 @@ const AdminOrders = () => {
           <h1 className="text-center">All Orders</h1>
           {orders?.map((o, i) => {
             return (
-              <div className="border mb-3 shadow table-responsive">
+              <div className="border mb-3 shadow table-responsive" key={o._id}>
                 <table className="table">
                   <thead>
                     <tr  className="table-dark">
@@ -120,24 +121,26 @@ const AdminOrders = () => {
 
                 <div className="container">
                   {o?.products?.map((item) => (
-                    <div className="row mb-2 p-3 card flex-row" key={item?.product?._id}>
-                      <div className="col-md-4">
-                        { item?.product &&
-                        <img
-                          src={`/api/v1/product/product-photo/${item?.product?._id}`}
-                          className="card-img-top"
-                          alt={item.product.name}
-                          width="100px"
-                          height={"160px"}
-                        />}
+                    <Link key={item.product._id} to={`/product/${item.product.slug}`} className="product-link">
+                      <div className="row mb-2 p-3 card flex-row">
+                        <div className="col-md-4">
+                          { item?.product &&
+                          <img
+                            src={`/api/v1/product/product-photo/${item?.product?._id}`}
+                            className="card-img-top"
+                            alt={item.product.name}
+                            width="100px"
+                            height={"160px"}
+                          />}
+                        </div>
+                        <div className="col-md-8">
+                          <p>{item?.product?.name}</p>
+                          <p>{item?.product?.description.substring(0, 30)}...</p>
+                          <p>Price : ₹{item?.product?.price}</p>
+                          <p>Quantity : {item?.count}</p>
+                        </div>
                       </div>
-                      <div className="col-md-8">
-                        <p>{item?.product?.name}</p>
-                        <p>{item?.product?.description.substring(0, 30)}...</p>
-                        <p>Price : ₹{item?.product?.price}</p>
-                        <p>Quantity : {item?.count}</p>
-                      </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </div>

@@ -43,20 +43,20 @@ const ProductCard = ({ p }) => {
   };
 
   return (
-    <div className="card card-component my-2" key={p._id}>
-      <Link key={p._id} to={`/product/${p.slug}`} className="product-link">
+    <div className="card card-component my-2" key={p?._id}>
+      <Link key={p?._id} to={`/product/${p?.slug}`} className="product-link">
         <img
-          src={`/api/v1/product/product-photo/${p._id}`}
+          src={`/api/v1/product/product-photo/${p?._id}`}
           className="card-img-top"
-          alt={p.name}
+          alt={p?.name}
         />
       </Link>
       <div className="card-body">
         <div className="card-name-price">
-          <h5 className="card-title">{p.name}</h5>
-          <h5 className="card-title card-price">₹{p.price}</h5>
+          <h5 className="card-title">{p?.name}</h5>
+          <h5 className="card-title card-price">₹{p?.price}</h5>
         </div>
-        <p className="card-text ">{p.description.substring(0, 60)}...</p>
+        <p className="card-text ">{p?.description.substring(0, 60)}...</p>
         <div className="card-bottom">
           <Select
             className="select-quantity"
@@ -74,7 +74,7 @@ const ProductCard = ({ p }) => {
           </button>
           <button
             className="btn more-details-btn ms-1"
-            onClick={() => navigate(`/product/${p.slug}`)}
+            onClick={() => navigate(`/product/${p?.slug}`)}
             // disabled={2 > 1}
           >
             {/* BUY NOW */}

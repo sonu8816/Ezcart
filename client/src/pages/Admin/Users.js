@@ -47,7 +47,7 @@ const Users = () => {
                     <th scope="col">Address</th>
                   </tr>
                 </thead>
-                <tbody class="table-group-divider">
+                <tbody className="table-group-divider">
                   { users?.map((u,i) => 
                     <tr key={u._id} className={u.role ? "table-primary" : "table-warning"}>
                      <th>{i+1}</th>

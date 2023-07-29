@@ -5,6 +5,8 @@ import axios from "axios";
 import { useAuth } from "../../context/auth";
 import moment from "moment";
 import "./../../styles/orderPageStyle.css";
+import { toast } from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -53,7 +55,12 @@ const Orders = () => {
   const handleCancel = async (orderId) => {
     try {
       const { data } = await axios.put(`/api/v1/auth/cancel-order/${orderId}`);
-      getOrders();
+      if(data?.status === "cancel") {
+        toast.success("Order cancelled successfully");
+        getOrders();
+      } else {
+        toast.error("Something went wrong");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -70,7 +77,7 @@ const Orders = () => {
             <h1 className="text-center">Your Orders</h1>
             {orders?.map((o, i) => {
               return (
-                <div className="border mb-3 shadow table-responsive">
+                <div className="border mb-3 shadow table-responsive" key={o._id}>
                   <table className="table">
                     <tbody>
                       <tr  className="table-dark">
@@ -105,23 +112,25 @@ const Orders = () => {
                   
                   <div className="container">
                     {o?.products?.map((item, i) => (
-                      <div className="row mb-2 p-3 card flex-row" key={item.product._id}>
-                        <div className="col-md-4">
-                          <img
-                            src={`/api/v1/product/product-photo/${item.product._id}`}
-                            className="card-img-top"
-                            alt={item.product.name}
-                            width="100px"
-                            height={"160px"}
-                          />
+                      <Link key={item.product._id} to={`/product/${item.product.slug}`} className="product-link">
+                        <div className="row mb-2 p-3 card flex-row">
+                          <div className="col-md-4">
+                            <img
+                              src={`/api/v1/product/product-photo/${item.product._id}`}
+                              className="card-img-top"
+                              alt={item.product.name}
+                              width="100px"
+                              height={"160px"}
+                            />
+                          </div>
+                          <div className="col-md-8">
+                            <p>{item.product.name}</p>
+                            <p>{item.product.description.substring(0, 30)}...</p>
+                            <p>Price : ₹{item.product.price}</p>
+                            <p>Quantity : {item.count}</p>
+                          </div>
                         </div>
-                        <div className="col-md-8">
-                          <p>{item.product.name}</p>
-                          <p>{item.product.description.substring(0, 30)}...</p>
-                          <p>Price : ₹{item.product.price}</p>
-                          <p>Quantity : {item.count}</p>
-                        </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
                 </div>

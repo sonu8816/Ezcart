@@ -44,7 +44,7 @@ const Products = () => {
                 className="product-link"
               >
                 <div className="card mb-3" >
-                  <div className="row g-0" key={p._id}>
+                  <div className="row g-0">
                     <div className="col-md-4 d-flex align-items-center justify-content-center">
                       <img
                         src={`/api/v1/product/product-photo/${p._id}`}

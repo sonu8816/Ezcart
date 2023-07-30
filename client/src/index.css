@@ -166,6 +166,9 @@
   margin-bottom: 30px;
 }
 
-.card-component img:hover {
+.card-component img{
   transform: scale(0.9)  !important;
+}
+.card-component img:hover {
+  transform: scale(1.0)  !important;
 }

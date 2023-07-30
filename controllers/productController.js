@@ -203,7 +203,7 @@ export const updateProductController = async (req, res) => {
 // filter product
 export const productFiltersController = async (req, res) => {
   try {
-    const perPage = 9;
+    const perPage = 8;
     const page = req.params.page ? req.params.page : 1;
    
     const { checked, radio } = req.body;

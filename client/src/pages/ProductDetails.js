@@ -95,9 +95,8 @@ const ProductDetails = () => {
 
   //inital product details
   useEffect(() => {
-    if (params?.slug) {
-      getProduct();
-    }
+    if (params?.slug) getProduct();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [params?.slug]); 
   
   useEffect(() => {

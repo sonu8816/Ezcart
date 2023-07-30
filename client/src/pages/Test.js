@@ -83,7 +83,10 @@ const HomePage = () => {
   };
     
   const handleApplyFilter = () => {
-    if(areArraysEqual(checked, ichecked) && areArraysEqual(radio, iradio)) return;
+    if(areArraysEqual(checked, ichecked) && radio.length===iradio.length) {
+      if(radio.length===0) return;
+      else if(radio[0]===iradio[0] && radio[1]===iradio[1]) return;
+    }
     setChecked([...ichecked]);
     setRadio([...iradio]);
     setPage(0);
@@ -263,9 +266,9 @@ const HomePage = () => {
                 RESET FILTERS
               </button>
             </div>
-
+         
             <h5>Showing {products.length} of {total} </h5>
-            <h5> Page {page} of {Math.ceil(total / 9)}</h5>
+            <h5> Page {page} of {Math.ceil(total / 8)}</h5>
           </div>
 
           <div className="col-md-9 my-2">

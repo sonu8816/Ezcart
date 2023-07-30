@@ -59,9 +59,8 @@ const PriceRangeSlider = ({ range, setRange }) => {
   };
 
   const handlePointerClick = (event) => {
-    if (!userClicked) {
-      setUserClicked(true);
-    }
+    if (!userClicked) setUserClicked(true);
+    
     const rect = rangeRef.current.getBoundingClientRect();
     const clickX = event.clientX - rect.left;
     const totalWidth = rect.right - rect.left;

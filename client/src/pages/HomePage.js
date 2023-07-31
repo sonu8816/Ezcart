@@ -7,13 +7,13 @@ import ImageSlider from "../components/ImageSlider";
 import ProductCard from "../components/ProductCard";
 import PriceRangeSlider from "../components/RangeSlider";
 import axios from "axios";
-import "../styles/Homepage.css" ;
 import { AiOutlineReload } from "react-icons/ai";
 import { CgMoveLeft, CgMoveRight } from "react-icons/cg";
+import "../styles/Homepage.css" ;
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(window.innerWidth <= 768 ? true : false);
   const [checked, setChecked] = useState([]);
   const [ichecked, setiChecked] = useState([]);  //for input checkbox store
   const [radio, setRadio] = useState([]);

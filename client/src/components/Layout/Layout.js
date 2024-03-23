@@ -8,7 +8,7 @@ import GoToTop from "./GoToTop";
 const Layout = ({ children, title, description, keywords, author }) => {
   return (
     <div>
-       <Helmet>
+      <Helmet>
         <meta charSet="utf-8" />
         <meta name="description" content={description} />
         <meta name="keywords" content={keywords} />
@@ -30,7 +30,7 @@ Layout.defaultProps = {
   title: "Ecommerce app - shop now",
   description: "mern stack project",
   keywords: "mern,react,node,mongodb",
-  author: "Ashish",
+  author: "Utkarsh",
 };
 
 export default Layout;

@@ -37,8 +37,9 @@ const Header = () => {
           >
             <span className="navbar-toggler-icon" />
           </button>
+          
           <Link to="/" className="navbar-brand">
-            🛒 ELITE COMMERCE
+            🛒 EZkart
           </Link>
 
           <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
